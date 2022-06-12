@@ -1,19 +1,27 @@
-import { Home, Login, NewDetails, Favorites } from './pages';
-import './App.css';
+import { Home, Favorites, Login, NewsDetail } from './pages';
+import './styles.css';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
-import { LoadingScreen } from './components';
+import { LoadingScreen, NavBar, ProtectedRoutes } from './components';
+import { useSelector } from 'react-redux';
 
 function App() {
-  return (    
+
+  const isLoading = useSelector(state => state.isLoading);
+  return (
     <HashRouter>
+      <NavBar />
       <Container>
-        <LoadingScreen/>
+        { isLoading && <LoadingScreen /> }
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/productos/:id" element={<NewDetails />} />
-          <Route path="/favorites" element={<Favorites />} />
+
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/favorites" element={<Favorites />} />
+          </Route>
+
         </Routes>
       </Container>
     </HashRouter>
@@ -21,3 +29,4 @@ function App() {
 }
 
 export default App;
+
